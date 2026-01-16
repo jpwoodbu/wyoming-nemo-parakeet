@@ -17,9 +17,9 @@ from wyoming import server
 _LOGGER = logging.getLogger(__name__)
 
 
-_REPO_ID = "nvidia"
-_MODEL_ID = "parakeet-tdt-0.6b-v3"
-_URL = f"https://huggingface.co/{_REPO_ID}/{_MODEL_ID}"
+REPO_ID = "nvidia"
+MODEL_ID = "parakeet-tdt-0.6b-v3"
+_URL = f"https://huggingface.co/{REPO_ID}/{MODEL_ID}"
 
 _INFO = info.Info(
     asr=[
@@ -34,10 +34,10 @@ _INFO = info.Info(
             version="0.0.1",
             models=[
                 info.AsrModel(
-                    name=_MODEL_ID,
+                    name=MODEL_ID,
                     description="Nvidia Parakeet multilingual automatic speech recognition (ASR) model",
                     attribution=info.Attribution(
-                        name=_REPO_ID.title(),
+                        name=REPO_ID.title(),
                         url=_URL,
                     ),
                     installed=True,
@@ -55,17 +55,16 @@ class ParakeetEventHandler(server.AsyncEventHandler):
 
     def __init__(
         self,
+        model,
+        model_lock: asyncio.Lock,
         *args,
         **kwargs,
     ) -> None:
         super().__init__(*args, **kwargs)
 
         self.info_event = _INFO.event()
-        model = nemo_asr.models.ASRModel.from_pretrained(
-            model_name=f"{_REPO_ID}/{_MODEL_ID}")
-        # TODO(jpwoodbu) Make using an Intel GPU optional.
-        self.model = model.to('xpu')
-        self.model_lock = asyncio.Lock()
+        self.model = model
+        self.model_lock = model_lock
         self._wav_dir = tempfile.TemporaryDirectory()
         self._wav_path = os.path.join(self._wav_dir.name, "speech.wav")
         self._wav_file: Optional[wave.Wave_write] = None
