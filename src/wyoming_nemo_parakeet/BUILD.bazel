@@ -40,3 +40,11 @@ py_binary(
         xpu_requirement("wyoming"),
     ],
 )
+
+py_binary(
+    name = "xpu_available",
+    srcs = ["xpu_available.py"],
+    deps = [
+        xpu_requirement("torch"),
+    ],
+)
