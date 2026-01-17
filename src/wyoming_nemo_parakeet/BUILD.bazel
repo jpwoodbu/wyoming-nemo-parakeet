@@ -1,0 +1,42 @@
+load("@pypi//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+load("@xpu//:requirements.bzl", xpu_requirement = "requirement")
+
+compile_pip_requirements(
+    name = "requirements",
+    src = "requirements.in",
+    requirements_txt = "requirements_lock.txt",
+)
+
+compile_pip_requirements(
+    name = "requirements_xpu",
+    src = "requirements_xpu.in",
+    extra_args = [
+        "--index-url",
+        "https://download.pytorch.org/whl/xpu",
+        "--extra-index-url",
+        "https://pypi.org/simple",
+    ],
+    requirements_txt = "requirements_xpu_lock.txt",
+)
+
+py_library(
+    name = "handler",
+    srcs = ["handler.py"],
+    deps = [
+        xpu_requirement("wyoming"),
+    ],
+)
+
+py_binary(
+    name = "main",
+    srcs = ["main.py"],
+    deps = [
+        ":handler",
+        xpu_requirement("nemo-toolkit"),
+        xpu_requirement("torch"),
+        xpu_requirement("torchaudio"),
+        xpu_requirement("wyoming"),
+    ],
+)

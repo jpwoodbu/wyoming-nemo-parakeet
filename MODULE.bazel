@@ -1,0 +1,36 @@
+"""Wyoming server to provide ASR via NeMo Parakeet"""
+
+module(name = "wyoming_nemo_parakeet")
+
+bazel_dep(name = "rules_python", version = "1.8.0")
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    python_version = "3.13",
+)
+use_repo(python, "python_3_13")
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "pypi",
+    python_version = "3.13",
+    requirements_lock = "//src/wyoming_nemo_parakeet:requirements_lock.txt",
+)
+
+# Repo providing PyTorch for Intel hardware (e.g. GPUs) with fallback to the
+# default PyPI hub. This is so nemo-toolkit can be installed nominally from the
+# XPU repo, bringing in its torch dependency from the XPU repo, but in the event
+# the XPU repo doens't include nemo-toolkit (seems likely), it should get
+# installed from PyPI.
+pip.parse(
+    extra_pip_args = [
+        "--index-url",
+        "https://download.pytorch.org/whl/xpu",
+        "--extra-index-url",
+        "https://pypi.org/simple",
+    ],
+    hub_name = "xpu",
+    python_version = "3.13",
+    requirements_lock = "//src/wyoming_nemo_parakeet:requirements_xpu_lock.txt",
+)
+use_repo(pip, "pypi", "xpu")

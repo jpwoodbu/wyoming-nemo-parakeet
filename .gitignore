@@ -1,2 +1,5 @@
+# Ignore Bazel symlinks.
+/bazel-*
+
 /venv
 *.pyc

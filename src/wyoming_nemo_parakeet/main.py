@@ -5,8 +5,7 @@ import logging
 from nemo.collections import asr
 from wyoming import server as wyoming_server
 
-# from wyoming_nemo_parakeet import handler
-import handler
+from src.wyoming_nemo_parakeet import handler
 
 
 _LOGGER = logging.getLogger(__name__)
