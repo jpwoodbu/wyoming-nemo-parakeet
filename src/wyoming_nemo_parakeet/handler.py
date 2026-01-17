@@ -35,7 +35,7 @@ _INFO = info.Info(
             models=[
                 info.AsrModel(
                     name=MODEL_ID,
-                    description="Nvidia Parakeet multilingual automatic speech recognition (ASR) model",
+                    description="NVIDIA Parakeet multilingual automatic speech recognition (ASR) model",
                     attribution=info.Attribution(
                         name=REPO_ID.title(),
                         url=_URL,
