@@ -1,1 +1,4 @@
+nemo-toolkit[asr]==2.6.1
+torch
+torchaudio
 wyoming==1.8.0

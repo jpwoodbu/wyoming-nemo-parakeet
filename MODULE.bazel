@@ -11,12 +11,6 @@ python.toolchain(
 use_repo(python, "python_3_13")
 
 pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
-pip.parse(
-    hub_name = "pypi",
-    python_version = "3.13",
-    requirements_lock = "//src/wyoming_nemo_parakeet:requirements_lock.txt",
-)
-
 # Repo providing PyTorch for Intel hardware (e.g. GPUs) with fallback to the
 # default PyPI hub. This is so nemo-toolkit can be installed nominally from the
 # XPU repo, bringing in its torch dependency from the XPU repo, but in the event
@@ -29,8 +23,8 @@ pip.parse(
         "--extra-index-url",
         "https://pypi.org/simple",
     ],
-    hub_name = "xpu",
+    hub_name = "pip",
     python_version = "3.13",
-    requirements_lock = "//src/wyoming_nemo_parakeet:requirements_xpu_lock.txt",
+    requirements_lock = "//src/wyoming_nemo_parakeet:requirements_lock.txt",
 )
-use_repo(pip, "pypi", "xpu")
+use_repo(pip, "pip")

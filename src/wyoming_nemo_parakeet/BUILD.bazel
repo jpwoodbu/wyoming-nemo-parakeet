@@ -1,38 +1,31 @@
-load("@pypi//:requirements.bzl", "requirement")
+load("@pip//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
-load("@xpu//:requirements.bzl", xpu_requirement = "requirement")
 
 compile_pip_requirements(
     name = "requirements",
     src = "requirements.in",
-    requirements_txt = "requirements_lock.txt",
-)
-
-compile_pip_requirements(
-    name = "requirements_xpu",
-    src = "requirements_xpu.in",
     extra_args = [
         "--index-url",
         "https://download.pytorch.org/whl/xpu",
         "--extra-index-url",
         "https://pypi.org/simple",
     ],
-    requirements_txt = "requirements_xpu_lock.txt",
+    requirements_txt = "requirements_lock.txt",
 )
 
 XPU_DATA = [
-    "@xpu//intel_sycl_rt:data",
-    "@xpu//intel_pti:data",
-    "@xpu//oneccl:data",
-    "@xpu//onemkl_sycl_blas:data",
-    "@xpu//onemkl_sycl_dft:data",
-    "@xpu//onemkl_sycl_lapack:data",
-    "@xpu//mkl:data",
-    "@xpu//intel_cmplr_lib_ur:data",
-    "@xpu//intel_cmplr_lib_rt:data",
-    "@xpu//umf:data",
-    "@xpu//tcmlib:data",
+    "@pip//intel_sycl_rt:data",
+    "@pip//intel_pti:data",
+    "@pip//oneccl:data",
+    "@pip//onemkl_sycl_blas:data",
+    "@pip//onemkl_sycl_dft:data",
+    "@pip//onemkl_sycl_lapack:data",
+    "@pip//mkl:data",
+    "@pip//intel_cmplr_lib_ur:data",
+    "@pip//intel_cmplr_lib_rt:data",
+    "@pip//umf:data",
+    "@pip//tcmlib:data",
 ]
 
 py_library(
@@ -53,22 +46,9 @@ py_binary(
     deps = [
         ":handler",
         "@rules_python//python/runfiles",
-        xpu_requirement("nemo-toolkit"),
-        xpu_requirement("torch"),
-        xpu_requirement("torchaudio"),
+        requirement("nemo-toolkit"),
+        requirement("torch"),
+        requirement("torchaudio"),
         requirement("wyoming"),
-    ],
-)
-
-py_binary(
-    name = "xpu_available",
-    srcs = ["xpu_available.py"],
-    data = XPU_DATA,
-    env = {
-        "BAZEL_DATA_FILES": " ".join(["$(rlocationpaths {})".format(x) for x in XPU_DATA]),
-    },
-    deps = [
-        "@rules_python//python/runfiles",
-        xpu_requirement("torch"),
     ],
 )
