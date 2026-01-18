@@ -8,19 +8,19 @@ if BAZEL_DATA_FILES:
     from python.runfiles import runfiles
 
     r = runfiles.Create()
-    lib_dirs = {
-        os.path.dirname(r.Rlocation(x))
-        for x in BAZEL_DATA_FILES.split(" ")
-        if ".so" in x
-    }
-    os.environ["LD_LIBRARY_PATH"] = ":".join(lib_dirs)
-    del os.environ["BAZEL_DATA_FILES"]
-    import sys
+    if r:
+        lib_dirs = set()
+        for path in BAZEL_DATA_FILES.split(" "):
+            if ".so" in path and (location := r.Rlocation(path)):
+                lib_dirs.add(os.path.dirname(location))
+        os.environ["LD_LIBRARY_PATH"] = ":".join(lib_dirs)
+        del os.environ["BAZEL_DATA_FILES"]
+        import sys
 
-    # Restart the Python process so that the dynamic linker to can see the
-    # changes made to LD_LIBRARY_PATH.
-    os.environ["PYTHONPATH"] = ":".join(sys.path)
-    os.execv(sys.executable, [sys.executable] + sys.argv)
+        # Restart the Python process so that the dynamic linker to can see the
+        # changes made to LD_LIBRARY_PATH.
+        os.environ["PYTHONPATH"] = ":".join(sys.path)
+        os.execv(sys.executable, [sys.executable] + sys.argv)
 
 
 import asyncio
