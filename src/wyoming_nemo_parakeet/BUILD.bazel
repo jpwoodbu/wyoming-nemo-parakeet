@@ -46,12 +46,28 @@ py_binary(
     srcs = ["xpu_available.py"],
     data = [
         "@@rules_python++pip+xpu_313_intel_sycl_rt//:data",
+        "@@rules_python++pip+xpu_313_intel_pti//:data",
+        "@@rules_python++pip+xpu_313_oneccl//:data",
+        "@@rules_python++pip+xpu_313_onemkl_sycl_blas//:data",
+        "@@rules_python++pip+xpu_313_onemkl_sycl_dft//:data",
+        "@@rules_python++pip+xpu_313_onemkl_sycl_lapack//:data",
+        "@@rules_python++pip+xpu_313_mkl//:data",
+        "@@rules_python++pip+xpu_313_intel_cmplr_lib_ur//:data",
+        "@@rules_python++pip+xpu_313_intel_cmplr_lib_rt//:data",
     ],
     deps = [
         xpu_requirement("torch"),
-	xpu_requirement("intel_sycl_rt"),
     ],
     env = {
-	"LD_LIBRARY_PATH": "../rules_python++pip+xpu_313_intel_sycl_rt/data/lib",
+       "LD_LIBRARY_PATH": 
+           "../rules_python++pip+xpu_313_intel_sycl_rt/data/lib" +
+           ":../rules_python++pip+xpu_313_intel_pti/data/lib" +
+           ":../rules_python++pip+xpu_313_oneccl/data/lib" +
+           ":../rules_python++pip+xpu_313_onemkl_sycl_blas/data/lib" +
+           ":../rules_python++pip+xpu_313_onemkl_sycl_dft/data/lib" +
+           ":../rules_python++pip+xpu_313_onemkl_sycl_lapack/data/lib" +
+           ":../rules_python++pip+xpu_313_mkl/data/lib" +
+           ":../rules_python++pip+xpu_313_intel_cmplr_lib_ur/data/lib" +
+           ":../rules_python++pip+xpu_313_intel_cmplr_lib_rt/data/lib"
     },
 )
