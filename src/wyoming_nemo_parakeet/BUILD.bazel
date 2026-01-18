@@ -41,37 +41,29 @@ py_binary(
     ],
 )
 
+XPU_DATA = [
+    "@xpu//intel_sycl_rt:data",
+    "@xpu//intel_pti:data",
+    "@xpu//oneccl:data",
+    "@xpu//onemkl_sycl_blas:data",
+    "@xpu//onemkl_sycl_dft:data",
+    "@xpu//onemkl_sycl_lapack:data",
+    "@xpu//mkl:data",
+    "@xpu//intel_cmplr_lib_ur:data",
+    "@xpu//intel_cmplr_lib_rt:data",
+    "@xpu//umf:data",
+    "@xpu//tcmlib:data",
+]
+
 py_binary(
     name = "xpu_available",
     srcs = ["xpu_available.py"],
-    data = [
-        "@@rules_python++pip+xpu_313_intel_sycl_rt//:data",
-        "@@rules_python++pip+xpu_313_intel_pti//:data",
-        "@@rules_python++pip+xpu_313_oneccl//:data",
-        "@@rules_python++pip+xpu_313_onemkl_sycl_blas//:data",
-        "@@rules_python++pip+xpu_313_onemkl_sycl_dft//:data",
-        "@@rules_python++pip+xpu_313_onemkl_sycl_lapack//:data",
-        "@@rules_python++pip+xpu_313_mkl//:data",
-        "@@rules_python++pip+xpu_313_intel_cmplr_lib_ur//:data",
-        "@@rules_python++pip+xpu_313_intel_cmplr_lib_rt//:data",
-        "@@rules_python++pip+xpu_313_umf//:data",
-        "@@rules_python++pip+xpu_313_tcmlib//:data",
-    ],
+    data = XPU_DATA,
     deps = [
+        "@rules_python//python/runfiles",
         xpu_requirement("torch"),
     ],
     env = {
-       "LD_LIBRARY_PATH": 
-           "../rules_python++pip+xpu_313_intel_sycl_rt/data/lib" +
-           ":../rules_python++pip+xpu_313_intel_pti/data/lib" +
-           ":../rules_python++pip+xpu_313_oneccl/data/lib" +
-           ":../rules_python++pip+xpu_313_onemkl_sycl_blas/data/lib" +
-           ":../rules_python++pip+xpu_313_onemkl_sycl_dft/data/lib" +
-           ":../rules_python++pip+xpu_313_onemkl_sycl_lapack/data/lib" +
-           ":../rules_python++pip+xpu_313_mkl/data/lib" +
-           ":../rules_python++pip+xpu_313_intel_cmplr_lib_ur/data/lib" +
-           ":../rules_python++pip+xpu_313_intel_cmplr_lib_rt/data/lib" +
-           ":../rules_python++pip+xpu_313_umf/data/lib" +
-           ":../rules_python++pip+xpu_313_tcmlib/data/lib"
+        "BAZEL_DATA_FILES": " ".join(["$(rlocationpaths {})".format(x) for x in XPU_DATA]),
     },
 )
