@@ -21,26 +21,6 @@ compile_pip_requirements(
     requirements_txt = "requirements_xpu_lock.txt",
 )
 
-py_library(
-    name = "handler",
-    srcs = ["handler.py"],
-    deps = [
-        xpu_requirement("wyoming"),
-    ],
-)
-
-py_binary(
-    name = "main",
-    srcs = ["main.py"],
-    deps = [
-        ":handler",
-        xpu_requirement("nemo-toolkit"),
-        xpu_requirement("torch"),
-        xpu_requirement("torchaudio"),
-        xpu_requirement("wyoming"),
-    ],
-)
-
 XPU_DATA = [
     "@xpu//intel_sycl_rt:data",
     "@xpu//intel_pti:data",
@@ -55,15 +35,40 @@ XPU_DATA = [
     "@xpu//tcmlib:data",
 ]
 
+py_library(
+    name = "handler",
+    srcs = ["handler.py"],
+    deps = [
+        requirement("wyoming"),
+    ],
+)
+
+py_binary(
+    name = "main",
+    srcs = ["main.py"],
+    data = XPU_DATA,
+    env = {
+        "BAZEL_DATA_FILES": " ".join(["$(rlocationpaths {})".format(x) for x in XPU_DATA]),
+    },
+    deps = [
+        ":handler",
+        "@rules_python//python/runfiles",
+        xpu_requirement("nemo-toolkit"),
+        xpu_requirement("torch"),
+        xpu_requirement("torchaudio"),
+        requirement("wyoming"),
+    ],
+)
+
 py_binary(
     name = "xpu_available",
     srcs = ["xpu_available.py"],
     data = XPU_DATA,
+    env = {
+        "BAZEL_DATA_FILES": " ".join(["$(rlocationpaths {})".format(x) for x in XPU_DATA]),
+    },
     deps = [
         "@rules_python//python/runfiles",
         xpu_requirement("torch"),
     ],
-    env = {
-        "BAZEL_DATA_FILES": " ".join(["$(rlocationpaths {})".format(x) for x in XPU_DATA]),
-    },
 )
