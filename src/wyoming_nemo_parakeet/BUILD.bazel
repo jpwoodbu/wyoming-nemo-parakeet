@@ -1,6 +1,6 @@
 load("@pip//:requirements.bzl", "requirement")
-load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
 
 compile_pip_requirements(
     name = "requirements",
