@@ -15,10 +15,10 @@ if BAZEL_DATA_FILES:
                 lib_dirs.add(os.path.dirname(location))
         os.environ["LD_LIBRARY_PATH"] = ":".join(lib_dirs)
         del os.environ["BAZEL_DATA_FILES"]
-        import sys
 
         # Restart the Python process so that the dynamic linker to can see the
         # changes made to LD_LIBRARY_PATH.
+        import sys
         os.environ["PYTHONPATH"] = ":".join(sys.path)
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
