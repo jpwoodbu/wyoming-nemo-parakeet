@@ -44,7 +44,14 @@ py_binary(
 py_binary(
     name = "xpu_available",
     srcs = ["xpu_available.py"],
+    data = [
+        "@@rules_python++pip+xpu_313_intel_sycl_rt//:data",
+    ],
     deps = [
         xpu_requirement("torch"),
+	xpu_requirement("intel_sycl_rt"),
     ],
+    env = {
+	"LD_LIBRARY_PATH": "../rules_python++pip+xpu_313_intel_sycl_rt/data/lib",
+    },
 )
