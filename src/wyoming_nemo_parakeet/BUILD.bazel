@@ -54,6 +54,8 @@ py_binary(
         "@@rules_python++pip+xpu_313_mkl//:data",
         "@@rules_python++pip+xpu_313_intel_cmplr_lib_ur//:data",
         "@@rules_python++pip+xpu_313_intel_cmplr_lib_rt//:data",
+        "@@rules_python++pip+xpu_313_umf//:data",
+        "@@rules_python++pip+xpu_313_tcmlib//:data",
     ],
     deps = [
         xpu_requirement("torch"),
@@ -68,6 +70,8 @@ py_binary(
            ":../rules_python++pip+xpu_313_onemkl_sycl_lapack/data/lib" +
            ":../rules_python++pip+xpu_313_mkl/data/lib" +
            ":../rules_python++pip+xpu_313_intel_cmplr_lib_ur/data/lib" +
-           ":../rules_python++pip+xpu_313_intel_cmplr_lib_rt/data/lib"
+           ":../rules_python++pip+xpu_313_intel_cmplr_lib_rt/data/lib" +
+           ":../rules_python++pip+xpu_313_umf/data/lib" +
+           ":../rules_python++pip+xpu_313_tcmlib/data/lib"
     },
 )
