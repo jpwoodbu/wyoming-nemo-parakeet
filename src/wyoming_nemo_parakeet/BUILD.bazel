@@ -1,6 +1,7 @@
+load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library", "py_pex_binary")
 load("@pip//:requirements.bzl", "requirement")
+load("@rules_pkg//:pkg.bzl", "pkg_tar")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
-load("@aspect_rules_py//py:defs.bzl", "py_binary", "py_library")
 
 compile_pip_requirements(
     name = "requirements",
@@ -51,4 +52,23 @@ py_binary(
         requirement("torchaudio"),
         requirement("wyoming"),
     ],
+)
+
+## All the packaging targets below are experimental.
+py_pex_binary(
+    name = "main_pex",
+    binary = ":main",
+)
+
+filegroup(
+    name = "main_zip",
+    srcs = [":main"],
+    output_group = "python_zip_file",
+)
+
+pkg_tar(
+    name = "main_tarball",
+    srcs = [":main"],
+    extension = "tar.gz",
+    include_runfiles = True,
 )
