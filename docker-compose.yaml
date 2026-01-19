@@ -1,0 +1,19 @@
+services:
+  wyoming-nemo-parakeet:
+    image: jpwoodbu/wyoming-nemo-parakeet:latest
+    container_name: wyoming-nemo-parakeet
+    restart: unless-stopped
+    ports:
+      - "10300:10300"
+    # Needed for GPU acceleration
+    devices:
+      - /dev/dri:/dev/dri
+    user: "1000:1000"
+    # Replace 992 with whatever GID is needed to read/write to /dev/dri/render*.
+    group_add:
+      - "992"
+    volumes:
+      - models:/models
+
+volumes:
+  models:
