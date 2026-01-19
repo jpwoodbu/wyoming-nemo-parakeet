@@ -18,8 +18,8 @@ $ pip install .
 
 ## Running the server
 
-From the `src` directory:
 ```sh
+$ . .venv/bin/activate
 $ python -m wyoming_nemo_parakeet
 ```
 
