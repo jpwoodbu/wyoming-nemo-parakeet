@@ -23,6 +23,11 @@ $ . .venv/bin/activate
 $ python -m wyoming_nemo_parakeet
 ```
 
+To see flags, run:
+```sh
+$ python -m wyoming_nemo_parakeet --help
+```
+
 ## Setup with Docker
 
 Build the Docker image:
@@ -44,7 +49,4 @@ $ docker compose up -d
 **NOTE:** It usually takes a minute or so before the server is ready to serve requests; more time if it's the first time it's run and it needs to download the model.
 
 ## Roadmap
-* Make running on Intel GPUs optional
-* Add application logging
-* Add flags for things like where to store the model, what address and port to listen on, etc.
 * Reduce or eliminate the **very** noisy NeMo logging
