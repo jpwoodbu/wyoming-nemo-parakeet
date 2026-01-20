@@ -93,7 +93,7 @@ class ParakeetEventHandler(server.AsyncEventHandler):
                 result = self.model.transcribe(self._wav_path, verbose=False)
             text = result[0].text
             assert isinstance(text, str)
-            _LOGGER.info(text)
+            _LOGGER.info(f"Transcribed: {text}")
 
             await self.write_event(asr.Transcript(text=text).event())
             _LOGGER.debug("Completed request")

@@ -47,6 +47,3 @@ $ docker compose up -d
 ```
 
 **NOTE:** It usually takes a minute or so before the server is ready to serve requests; more time if it's the first time it's run and it needs to download the model.
-
-## Roadmap
-* Reduce or eliminate the **very** noisy NeMo logging
