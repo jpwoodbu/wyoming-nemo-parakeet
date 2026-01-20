@@ -19,8 +19,8 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
-    "wyoming",
-    "nemo_toolkit[asr]",
+    "wyoming==1.8.0",
+    "nemo_toolkit[asr]==2.6.1",
 ]
 
 [project.urls]
