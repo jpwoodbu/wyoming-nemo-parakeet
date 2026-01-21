@@ -38,6 +38,7 @@ async def start(uri: str, use_xpu: bool) -> None:
 
     model_lock = asyncio.Lock()
     server = wyoming_server.AsyncServer.from_uri(uri)
+    _LOGGER.info(f'Starting server at {uri}')
     await server.run(partial(handler.ParakeetEventHandler, model, model_lock))
 
 

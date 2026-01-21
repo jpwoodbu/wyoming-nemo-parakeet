@@ -5,6 +5,7 @@ import asyncio
 import logging
 import os
 import tempfile
+import time
 import wave
 
 from wyoming import asr
@@ -83,17 +84,20 @@ class ParakeetEventHandler(server.AsyncEventHandler):
             return True
 
         if audio.AudioStop.is_type(event.type):
-            _LOGGER.debug("Audio stopped. Transcribing.")
+            _LOGGER.debug("Audio stopped. Transcribing...")
             assert self._wav_file is not None
 
             self._wav_file.close()
             self._wav_file = None
 
             async with self.model_lock:
+                start_time = time.perf_counter()
                 result = self.model.transcribe(self._wav_path, verbose=False)
+                end_time = time.perf_counter()
             text = result[0].text
             assert isinstance(text, str)
-            _LOGGER.info(f"Transcribed: {text}")
+            inference_time = end_time - start_time
+            _LOGGER.info(f"Transcribed in {inference_time:.3f}s: {text}")
 
             await self.write_event(asr.Transcript(text=text).event())
             _LOGGER.debug("Completed request")
