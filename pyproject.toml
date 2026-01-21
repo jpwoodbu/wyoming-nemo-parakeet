@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "wyoming-nemo-parakeet"
+name = "wyoming-parakeet"
 version = "0.1.0"
-description = "Wyoming protocol server for NVIDIA NeMo Parakeet"
+description = "Wyoming protocol server for NVIDIA Parakeet"
 readme = "README.md"
 requires-python = ">=3.13"
 license = { text = "Apache-2.0" }
@@ -24,4 +24,4 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/jpwoodbu/wyoming-nemo-parakeet"
+Homepage = "https://github.com/jpwoodbu/wyoming-parakeet"

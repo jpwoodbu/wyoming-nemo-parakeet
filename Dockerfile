@@ -39,4 +39,4 @@ RUN pip install --upgrade pip && \
 ENV XDG_CACHE_HOME=/models
 RUN mkdir -p /models && chmod 1777 /models
 
-ENTRYPOINT ["python", "-m", "wyoming_nemo_parakeet"]
+ENTRYPOINT ["python", "-m", "wyoming_parakeet"]

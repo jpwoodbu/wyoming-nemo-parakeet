@@ -1,6 +1,10 @@
-# Wyoming NeMo Parakeet
+# Wyoming Parakeet
 
-A Wyoming protocol server for NVIDIA NeMo Parakeet that runs on Intel GPUs.
+A Wyoming protocol server for NVIDIA Parakeet.
+
+**IMPORTANT:** This project is transitioning from running Parakeet on the [NeMo framework](https://github.com/NVIDIA-NeMo/NeMo) to running on [onnx-asr](https://github.com/istupakov/onnx-asr).
+
+**NOTE:** This project is also transitioning from primarily targetting execution on Intel GPUs to primarily targetting execution on CPUs with asperational support for Intel GPUs (and perhaps other GPUs too).
 
 ## Setup without Docker
 
