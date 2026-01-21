@@ -20,7 +20,7 @@ classifiers = [
 ]
 dependencies = [
     "wyoming==1.8.0",
-    "nemo_toolkit[asr]==2.6.1",
+    "onnx-asr[cpu,hub]",
 ]
 
 [project.urls]

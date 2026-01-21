@@ -18,18 +18,17 @@ from wyoming import server
 _LOGGER = logging.getLogger(__name__)
 
 
-REPO_ID = "nvidia"
-MODEL_ID = "parakeet-tdt-0.6b-v3"
-_URL = f"https://huggingface.co/{REPO_ID}/{MODEL_ID}"
+REPO_ID = "istupakov"
+MODEL_ID = "parakeet-tdt-0.6b-v3-onnx"
 
 _INFO = info.Info(
     asr=[
         info.AsrProgram(
             name="Parakeet ASR",
-            description="NeMo Parakeet transcription",
+            description="Parakeet transcription",
             attribution=info.Attribution(
                 name="Jonathan Woodbury",
-                url="https://github.com/jpwoodbu/wyoming-nemo-parakeet",
+                url="https://github.com/jpwoodbu/wyoming-parakeet",
             ),
             installed=True,
             version="0.0.1",
@@ -38,8 +37,8 @@ _INFO = info.Info(
                     name=MODEL_ID,
                     description="NVIDIA Parakeet multilingual automatic speech recognition (ASR) model",
                     attribution=info.Attribution(
-                        name=REPO_ID.title(),
-                        url=_URL,
+                        name="Ilya Stupakov",
+                        url=f"https://huggingface.co/{REPO_ID}/{MODEL_ID}",
                     ),
                     installed=True,
                     # TODO(jpwoodbu) Fill out this list of languages.
@@ -92,9 +91,8 @@ class ParakeetEventHandler(server.AsyncEventHandler):
 
             async with self.model_lock:
                 start_time = time.perf_counter()
-                result = self.model.transcribe(self._wav_path, verbose=False)
+                text = self.model.recognize(self._wav_path)
                 end_time = time.perf_counter()
-            text = result[0].text
             assert isinstance(text, str)
             inference_time = end_time - start_time
             _LOGGER.info(f"Transcribed in {inference_time:.3f}s: {text}")
