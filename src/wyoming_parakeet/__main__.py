@@ -1,7 +1,8 @@
 import argparse
 import asyncio
-from functools import partial
+import functools
 import logging
+import signal
 
 import onnx_asr
 from wyoming import server as wyoming_server
@@ -24,7 +25,20 @@ async def start(uri: str, quantization: str | None) -> None:
     model_lock = asyncio.Lock()
     server = wyoming_server.AsyncServer.from_uri(uri)
     _LOGGER.info(f"Starting server at {uri}")
-    await server.run(partial(handler.ParakeetEventHandler, model, model_lock))
+    server_task = asyncio.create_task(
+        server.run(
+            functools.partial(handler.ParakeetEventHandler, model, model_lock)
+        )
+    )
+
+    loop = asyncio.get_running_loop()
+    loop.add_signal_handler(signal.SIGINT, server_task.cancel)
+    loop.add_signal_handler(signal.SIGTERM, server_task.cancel)
+
+    try:
+        await server_task
+    except asyncio.CancelledError:
+        _LOGGER.info("Server stopped")
 
 
 def main() -> None:
